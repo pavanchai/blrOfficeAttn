@@ -27,13 +27,20 @@ export function exportPresentEmployeesPDF(
     day: "numeric",
   });
   doc.text(`Date: ${dateStr}`, 14, 30);
-  doc.text(`Total Present: ${present.length} / ${employees.length}`, 14, 37);
+  doc.text(`Generated at: ${new Date().toLocaleTimeString("en-IN")}`, 14, 37);
+  doc.text(`Total Present: ${present.length} / ${employees.length}`, 14, 44);
 
   // Table
   autoTable(doc, {
-    startY: 45,
-    head: [["#", "Employee ID", "Name", "Department"]],
-    body: present.map((emp, i) => [i + 1, emp.id, emp.name, emp.department]),
+    startY: 52,
+    head: [["#", "Employee ID", "Name", "Department", "Checked In At"]],
+    body: present.map((emp, i) => {
+      const record = attendance.records[emp.id];
+      const checkedIn = record?.markedAt
+        ? new Date(record.markedAt).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })
+        : "—";
+      return [i + 1, emp.id, emp.name, emp.department, checkedIn];
+    }),
     styles: { fontSize: 10 },
     headStyles: { fillColor: [37, 99, 235] },
     alternateRowStyles: { fillColor: [240, 245, 255] },

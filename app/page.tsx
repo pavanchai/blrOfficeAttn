@@ -215,6 +215,11 @@ export default function AttendancePage() {
                   <div className="flex-1 min-w-0">
                     <div className="font-semibold text-slate-800 text-sm truncate">{emp.name}</div>
                     <div className="text-xs text-slate-500">{emp.id} · {emp.department}</div>
+                    {isPresent && markedAt && (
+                      <div className="text-xs text-green-600 mt-0.5">
+                        Checked in at {new Date(markedAt).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}
+                      </div>
+                    )}
                   </div>
                   <button
                     onClick={() => handleToggle(emp.id)}
